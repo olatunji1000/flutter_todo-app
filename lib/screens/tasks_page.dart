@@ -3,31 +3,41 @@ import 'package:hive_flutter/hive_flutter.dart';
 import '../models/task.dart';
 
 class TasksPage extends StatefulWidget {
-  const TasksPage({Key? key}) : super(key: key);
+  const TasksPage({super.key});
 
   @override
   State<TasksPage> createState() => _TasksPageState();
 }
 
 class _TasksPageState extends State<TasksPage> {
-  double? _deviceHeight, _deviceWidth;
   String? content;
   Box? _box;
 
   @override
   Widget build(BuildContext context) {
-    _deviceHeight = MediaQuery.of(context).size.height;
-    _deviceWidth = MediaQuery.of(context).size.width;
-
     return Scaffold(
       appBar: AppBar(
-        toolbarHeight: _deviceHeight! * 0.1,
-        title: const Text("Daily Planner"),
+        elevation: 0,
+        centerTitle: true,
+        title: const Text(
+          "Daily Planner",
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Colors.indigo, Colors.deepPurple],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+        ),
       ),
       body: _tasksWidget(),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: FloatingActionButton.extended(
         onPressed: displayTaskPop,
-        child: const Icon(Icons.add),
+        icon: const Icon(Icons.add),
+        label: const Text("Add Task"),
       ),
     );
   }
@@ -35,26 +45,55 @@ class _TasksPageState extends State<TasksPage> {
   Widget _todoList() {
     List tasks = _box!.values.toList();
 
+    if (tasks.isEmpty) {
+      return const Center(
+        child: Text(
+          "No tasks yet.\nTap + to add one.",
+          textAlign: TextAlign.center,
+          style: TextStyle(color: Colors.grey),
+        ),
+      );
+    }
+
     return ListView.builder(
+      padding: const EdgeInsets.all(12),
       itemCount: tasks.length,
       itemBuilder: (BuildContext context, int index) {
         var task = Task.fromMap(tasks[index]);
 
-        return ListTile(
-          title: Text(task.todo),
-          subtitle: Text(task.timeStamp.toString()),
-          trailing: task.done
-              ? const Icon(Icons.check_box_outlined, color: Colors.greenAccent)
-              : const Icon(Icons.check_box_outline_blank),
-          onTap: () {
-            task.done = !task.done;
-            _box!.putAt(index, task.toMap());
-            setState(() {});
-          },
-          onLongPress: () {
-            _box!.deleteAt(index);
-            setState(() {});
-          },
+        return Card(
+          elevation: 3,
+          margin: const EdgeInsets.symmetric(vertical: 8),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: ListTile(
+            leading: Icon(
+              task.done ? Icons.check_circle : Icons.circle_outlined,
+              color: task.done ? Colors.green : Colors.grey,
+            ),
+            title: Text(
+              task.todo,
+              style: TextStyle(
+                decoration:
+                    task.done ? TextDecoration.lineThrough : null,
+              ),
+            ),
+            subtitle: Text(
+              "${task.timeStamp}",
+              style: const TextStyle(fontSize: 12),
+            ),
+            trailing: const Icon(Icons.delete_outline),
+            onTap: () {
+              task.done = !task.done;
+              _box!.putAt(index, task.toMap());
+              setState(() {});
+            },
+            onLongPress: () {
+              _box!.deleteAt(index);
+              setState(() {});
+            },
+          ),
         );
       },
     );
@@ -77,10 +116,17 @@ class _TasksPageState extends State<TasksPage> {
   void displayTaskPop() {
     showDialog(
       context: context,
-      builder: (BuildContext _context) {
+      builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text("Add a ToDo"),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          title: const Text("Add New Task"),
           content: TextField(
+            autofocus: true,
+            decoration: const InputDecoration(
+              hintText: "Enter task...",
+            ),
             onSubmitted: (value) {
               if (value.isNotEmpty) {
                 var task = Task(
@@ -91,13 +137,9 @@ class _TasksPageState extends State<TasksPage> {
 
                 _box!.add(task.toMap());
 
-                setState(() {
-                  Navigator.pop(context);
-                });
+                Navigator.pop(context);
+                setState(() {});
               }
-            },
-            onChanged: (value) {
-              content = value;
             },
           ),
         );

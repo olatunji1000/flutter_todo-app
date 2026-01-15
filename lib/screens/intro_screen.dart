@@ -3,7 +3,7 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'tasks_page.dart';
 
 class IntroPage extends StatefulWidget {
-  const IntroPage({Key? key}) : super(key: key);
+  const IntroPage({super.key});
 
   @override
   State<IntroPage> createState() => _IntroPageState();
@@ -19,6 +19,42 @@ class _IntroPageState extends State<IntroPage> {
     super.dispose();
   }
 
+  Widget _buildPage({
+    required IconData icon,
+    required String title,
+    required String subtitle,
+    required Color color,
+  }) {
+    return Container(
+      color: color,
+      padding: const EdgeInsets.all(32),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(icon, size: 120, color: Colors.white),
+          const SizedBox(height: 30),
+          Text(
+            title,
+            style: const TextStyle(
+              fontSize: 28,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
+          ),
+          const SizedBox(height: 12),
+          Text(
+            subtitle,
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              fontSize: 16,
+              color: Colors.white70,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,21 +64,27 @@ class _IntroPageState extends State<IntroPage> {
             controller: _controller,
             onPageChanged: (index) {
               setState(() {
-                onLastPage = (index == 2);
+                onLastPage = index == 2;
               });
             },
             children: [
-              Container(
-                color: Colors.yellow,
-                child: Image.asset('assets/images/sleep.png'),
+              _buildPage(
+                icon: Icons.check_circle_outline,
+                title: 'Plan Your Day',
+                subtitle: 'Organize your daily tasks easily',
+                color: Colors.indigo,
               ),
-              Container(
-                color: Colors.yellow,
-                child: Image.asset('assets/images/exercise.png'),
+              _buildPage(
+                icon: Icons.schedule,
+                title: 'Stay On Time',
+                subtitle: 'Track when tasks are created',
+                color: Colors.deepPurple,
               ),
-              Container(
-                color: Colors.yellow,
-                child: Image.asset('assets/images/work.png'),
+              _buildPage(
+                icon: Icons.done_all,
+                title: 'Get Things Done',
+                subtitle: 'Mark tasks as completed',
+                color: Colors.teal,
               ),
             ],
           ),
@@ -53,7 +95,7 @@ class _IntroPageState extends State<IntroPage> {
               children: [
                 GestureDetector(
                   onTap: () {
-                    Navigator.push(
+                    Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
                         builder: (_) => const TasksPage(),
@@ -61,23 +103,22 @@ class _IntroPageState extends State<IntroPage> {
                     );
                   },
                   child: const Text(
-                    'skip',
-                    style: TextStyle(color: Colors.grey),
+                    'Skip',
+                    style: TextStyle(color: Colors.white),
                   ),
                 ),
                 SmoothPageIndicator(
                   controller: _controller,
                   count: 3,
-                  effect: const SwapEffect(
-                    dotColor: Colors.blue,
+                  effect: const WormEffect(
+                    dotColor: Colors.white54,
                     activeDotColor: Colors.white,
-                    type: SwapType.yRotation,
                   ),
                 ),
                 onLastPage
                     ? GestureDetector(
                         onTap: () {
-                          Navigator.push(
+                          Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
                               builder: (_) => const TasksPage(),
@@ -85,20 +126,20 @@ class _IntroPageState extends State<IntroPage> {
                           );
                         },
                         child: const Text(
-                          'done',
-                          style: TextStyle(color: Colors.grey),
+                          'Done',
+                          style: TextStyle(color: Colors.white),
                         ),
                       )
                     : GestureDetector(
                         onTap: () {
                           _controller.nextPage(
-                            duration: const Duration(milliseconds: 500),
-                            curve: Curves.easeIn,
+                            duration: const Duration(milliseconds: 400),
+                            curve: Curves.easeInOut,
                           );
                         },
                         child: const Icon(
                           Icons.arrow_forward,
-                          color: Colors.grey,
+                          color: Colors.white,
                         ),
                       ),
               ],

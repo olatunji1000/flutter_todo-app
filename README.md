@@ -1,16 +1,33 @@
-# todo_app
+# Daily Planner (Todo App)
 
-A new Flutter project.
+A simple Flutter **Todo / Daily Planner application** built as part of a Flutter learning project.  
+The app allows users to add, view, complete, and delete daily tasks, with data stored locally on the device.
 
-## Getting Started
+---
 
-This project is a starting point for a Flutter application.
+## 📱 App Features
 
-A few resources to get you started if this is your first Flutter project:
+- Add new daily tasks
+- Mark tasks as completed
+- Delete tasks by long press
+- View task creation time
+- Intro/onboarding screens
+- Clean and simple user interface
+- Local data persistence using Hive
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+---
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## 🛠️ Technologies Used
+
+- **Flutter (Dart)**
+- **Hive** for local storage
+- **Material Design 3**
+- **Smooth Page Indicator**
+
+## 🖼️ App Screenshots
+
+### Intro Screen
+![Intro Screen](assets/images/image1.png)
+
+### Tasks Page
+![Tasks Page](assets/images/image2.png)
