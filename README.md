@@ -27,7 +27,9 @@ The app allows users to add, view, complete, and delete daily tasks, with data s
 ## 🖼️ App Screenshots
 
 ### Intro Screen
-<img src="assets/images/image1.png" width="300"/>
+
+![Intro Screen](./assets/images/image1.png)
 
 ### Tasks Page
-<img src="assets/images/image2.png" width="300"/>
+
+![Tasks Page](./assets/images/image2.png)
